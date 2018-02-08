@@ -1,0 +1,30 @@
+# Series-de-tiempo-2018########1.Simulación de series de tiempo####### 7 de Febrero
+###Vamos a simular un indicador
+###Para la simulación en principio necesitamos alguna información
+###Valor máximo, mínimo, el numero de datos
+
+##En este ejemplo vamos a proponer la población en Mexico que el valor mínimo serán de 100, max 120, 
+#14 datos que inicie en 2000
+pob<-sample(100:120,15, replace=F)
+pob
+
+##La converimos en serie de tiempo
+pobts<- ts (pob,frequency=1 , start= (2000) )#ts:función que convierte tus datos en serie de tiempo
+#Frecuency: cuantas veces se repite el dato anualmente, anualmente=1, mes:12, diario:365
+#Start: en que año empieza la serie
+end(pobts) ##Preguntar a R en que año termina la serie
+start(pobts)
+plot(pobts)#Para graficar 
+plot(aggregate(pobts))
+
+###########Bajar del INEGI la ocupación de las personas... (Info laboral ENOE)
+#Importar csv
+infor4<-read.csv("file:///C:/Users/USUARIO/Desktop/info.csv")
+#Convertir a serie de tiempo 
+infots<-ts(infor4,frequency=4,start=(2005))
+end(infots)
+start(infots)
+#Graficarlo
+plot(infots)
+plot(infots, ylim=c(0,100))
+plot(aggregate(infots))
