@@ -1,0 +1,52 @@
+# Series-de-tiempo-2018
+############ PRACTICA 12 DE FEBRERO ########
+#####AirPassangers
+install.packages("forecast")
+#forecast:paqueteria que contiene funciones para modelado de series
+require(forecast)
+View(AirPassengers)
+
+help("AirPassengers")   ###Help:buscar solo en la inf. que tiene cargado R
+??AirPassengers  ###??:Para que busque directo con Internet 
+class(AirPassengers) ##ts:datos de serie de tiempo
+start(AirPassengers)  ##Preguntamos cuando inicia
+print(AirPassengers)  ##Muetra todos lo datos de mi serie de tiempo
+length(AirPassengers)  ##Numero de datos de mi serie de tiempo 
+head(AirPassengers, n=8)##head :primeros datos para mostrar
+##Argumento1:la serie de tiempo, Argumento2: los n datos que quieres que te muestre
+tail(AirPassengers, n=8)##tail :ultimos datos para mostrar
+##Argumento1:la serie de tiempo, Argumento2: los n datos que quieres que te muestre
+plot(AirPassengers,xlab="Años", ylab="Número de pasajeros", type="s")
+
+
+###############Ejercicio en clase######
+#De la pagina del INEGI bajar la tasa informalidad laboral en valores relativos a nivel nacional, todos 
+#los trimestres desde el 2005 al 2017, en base la importan a R y la declaran serie de tiempo con el inicio,
+#fin, y frecuencia de la st, una vez que hayan declarado la serie usar la función print, length, head y 
+#tail ( con 10 datos) y explicarlas.
+#Graficar la serie de tiempo con tres tipos de gráficas diferentes y tres colores, ademas investigar y usar
+#las funciones time, deltat, cycle y frequency y explicar para que sirven.
+
+tainf<-read.csv("file:///C:/Users/USUARIO/Desktop/info.csv")
+infots<-ts(tainf,frequency=4,start=(2005), end=c(2017,4))
+start(infots)##Inicio en el 2005
+end(infots) ##termino en el 2017
+frequency(infots) ## frecuencia=4
+
+print(infots) ##Muestra las cuatro tasas de informalidad laboral por año, desde 2005 al 2017
+length(infots) ##La serie de tado cuenta con 51 datos 
+head(infots,n=10) ## muestra las 4 tasas de los años 2005 y 2006, del 2007 solo muestra la de los primero
+#dos cuatrimestres
+tail(infots, n=10) ##Muestra ultimas tres tasas del 2015, las del 2016 y las del 2017
+
+plot(infots,xlab="Años", ylab="Tasa de informalidad",type="c", col=3)
+plot(infots,xlab="Años", ylab="Tasa de informalidad",type="p", col=5)
+plot(infots,xlab="Años", ylab="Tasa de informalidad",type="b", col=15)
+
+help(time)
+
+time(infots) ###Muestra el numero de año en que fue muestreado
+deltat(infots) ###  Intervalo de tiempo entre observaciones
+cycle(infots)### La posición en el ciclo donde ocurrio la observación
+frequency(infots) ## Numero de veces que se repite 
+
