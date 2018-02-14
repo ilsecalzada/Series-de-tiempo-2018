@@ -1,0 +1,26 @@
+# Series-de-tiempo-2018
+####################14 de Febrero de 2018
+####Datos de registro de enfermos del 2000 al 2010 semestral 
+#350,358,367,367,380,388,402,415,432,450,NA,NA,NA,NA,367,342,324,315,310,298
+#Grafiquen este vector, declare y grafiquen esta serie
+
+y<-c(350,358,367,367,380,388,402,415,432,450,NA,NA,NA,NA,367,342,324,315,310,298)
+plot(y)
+regis<-ts(y,frequency = 2,start = (2000), end = (2010))
+plot(regis, xlab="Años", ylab="Enfermos")
+mean(regis, na.rm = T)
+
+#Imputar los datos faltantes ¿Cómo harían ?
+regis[11:14] <-mean(regis,na.rm = T) #Imputando por la media 
+regis
+
+#Grafiquen la nueva serie con la imputación, por ultimo grafiquen la serie de tiempo
+plot(regis, xlab="Años", ylab="Enfermos")
+
+#EuStockMarkets con la función plot...que observan? 
+plot(EuStockMarkets)
+#Es una multiple serie de tiempo 
+
+#Ahora grafiquen EuStockmarkets con la siguiente función 
+ts.plot(EuStockMarkets, col=1:4)
+#Primer argumento, que serie multiple quierer graficar, segundo argumento colores
