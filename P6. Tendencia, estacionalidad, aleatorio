@@ -1,0 +1,46 @@
+#######23 de Febrero 
+serie1<-sample(300:1000,120)
+tserie<-ts(serie1,frequency = 12, start = 2002)
+
+tdesco<-decompose(tserie)
+
+plot(tdesco)
+
+
+names(tdesco)
+
+##La suma de tdesco debe de dar tserie1 
+tdesco
+
+tserie
+##Valor st en Enero 2003... 331 
+
+tend<-tdesco$trend
+tend
+##645.9167
+##Es para obtener la tendecia 
+
+esta<-tdesco$seasonal
+esta
+##Es para obtener la estacionalidad 
+##30.362654
+
+alea<-tdesco$random
+alea
+##-345.2793210
+
+645.9167+30.362654-345.2793210
+
+
+
+#### TAREA: Bajar el PIB de México (Tasa del crecimiento anual del PIB 1950-2015)
+##Dividir esta gráica en 2 series de tiempo
+#1) Gráfica 1950,1980, gráfica 2. 1981 hasta 2015
+#Hacer una gráfica general de la st (1950 a 2015)
+#Estas tres gráficas mostrarlas en una misma ventana y las graficas con titulo principal, etiqueta eje x,
+# y tambien con subtitulo( fuente donde sacamos los datos)... en colores diferentes.
+#Descomponer las tres series y comprobar que la serie es igua la la tendencia, estacionalidad y aleatorio
+#en año 1980, 2000 y 2015
+#Interpretar y analizarlas estas gráficas... análisis asociado a aspectos económicos y políticos que 
+# hayan pasado (Banxico) 94-95 analizar cuatro sucesos en ese periodo 
+###**** poner leyendas.colores  en los periodos,
