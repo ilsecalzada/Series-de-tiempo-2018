@@ -1,0 +1,22 @@
+###Covarianza, correlacion 21 de Febrero###
+#Calcular covarianza y correlacion 
+
+partidos<-c(36,44,40,46,46,40,49,41,40)
+canastas<-c(13,20,20,20,20,28,21,22,31)
+
+n<-length(partidos)
+medx<-sum(partidos)/n
+medy<-sum(canastas)/n
+
+covxy<-sum((partidos-medx)*(canastas-medy))/(n-1)
+
+desvx<-sd(partidos) ######sd= para la desviación estandar
+desvy<-sd(canastas)
+
+Corxy<-covxy/(desvx*desvy)
+
+cov(partidos,canastas)
+cor(partidos,canastas)
+
+
+###La relación lineal entre las variables partidos y canastas es casi inexistente, la relacion es casi nula
