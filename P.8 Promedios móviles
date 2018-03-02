@@ -1,0 +1,36 @@
+
+install.packages("forecast")
+require(forecast)
+crim1<-c(12632,13607,12160,13335,14553,14654,12791,11923,10225,9847)
+tscrim<-ts(crim1, start=1980)
+ma(tscrim, order=5)
+##Time series:
+##start=
+##Frequency=1
+
+
+ma5crim<-c(NA,NA,13257.4, 13661.8, 13498.6, 13451.2, 12829.2, 11888.0,NA, NA)
+macrim<-data.frame (crim1,ma5crim) ##En el data frame en la segunda columna se tiene el 
+#promevio movil de orden 5 que expone un estimado de la tendencia, el primer valor es el 
+#promedio de las 5 primeras observaciones, el segundo valor corresponde a el promedio de los 
+#1981
+###Graficar para ver el comportamiento de los promedios móviles
+
+plot(tscrim, main="Crimen México orden 5", ylab="millones de personas", xlab="años")
+lines(ma(tscrim, 5), col="red")
+
+##Ahora vamos a graficar el comportamiento de los promedios móviles de orden 3
+plot(tscrim, main="Crimen México orden 3", ylab="millones de personas", xlab="años")
+lines(ma(tscrim,3),col="red")
+
+##Ahora vamos a graficar el comportamiento de los promedios móviles de orden 4
+plot(tscrim, main="Crimen México orden 4", ylab="millones de personas", xlab="años")
+lines(ma(tscrim,3),col="red")
+
+
+#Como se puede observar en las gráficas la tendencia se observa de color rojo y está más
+#suavizada que la serie, el principal movimiento se detecta sin todos los pequeños cambios El 
+#promedio movil no estima la tendencia al inicio y al final de la serie después hay métodos 
+#que si permiten estimar el inicio y final de la tendencia el orden de promedios móviles 
+#determina el suavizado de la tendencia, en general un orden grande significa una curva más 
+#suavizada.
