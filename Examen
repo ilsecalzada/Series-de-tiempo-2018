@@ -1,0 +1,92 @@
+#################EXAMEN
+#1) Genera 5 series de tiempo con nombre multiple1
+s1<-sample(15:35 , 250, replace = T )
+s2<-sample(100:200 , 250, replace = T )
+s3<-sample(29:49 , 250, replace = T )
+s4<-sample(42:162, 250, replace= T)
+
+
+series<-data.frame(s1, s2, s3, s4)
+
+multiple1<-ts(series, frequency = 12 , start =c( 1990, 3)) 
+
+
+
+mults1<-ts(series [ , 1], frequency = 12 , start = c( 1990, 3))
+mults2<-ts(series [ , 2], frequency = 12 , start = c( 1990, 3))
+mults3<-ts(series [ , 3], frequency = 12 , start = c( 1990, 3))
+mults4<-ts(series [ , 4], frequency = 12 , start = c( 1990, 3))
+
+
+#1.1 de la serie 1, 2 series de tiemppo y dividirlas (con función en R)
+
+
+x11() 
+layout(1:4) 
+
+serie1<-window(mults1, start=1990, end=2003)
+serie2<-window(mults1, start=1998,end=2006)
+
+plot(serie1, main="Serie 1 ,  primera división  ", xlab="años", col="green" , col.main= "green3")
+plot(serie1, main="Serie 1, segunda división", xlab="años", col="blue", col.main= "red")
+
+serie21<-window(mults2,start=1990, end=2003)
+serie22<-window(mults2, start=1998,end=2006)
+
+
+plot(serie21, main="Serie 2 ,  primera división  ", xlab="años", col="brown" , col.main= "red")
+plot(serie22, main="Serie 2 ,  segunda división  ", xlab="años", col="red" , col.main= "pink")
+
+
+#########################1.2 Dividir la serie 3 y 4 a traves de corchetes desde la observación 150 a 250
+x11() 
+layout(1:2) 
+
+div3<-ts(series[150:250,3], frequency = 12 , start= c(2002,8))
+
+div4<-ts(series[150:250,4], frequency = 12 , start=c(2002,8))
+
+plot(div3 , main="División de la serie 3 ", xlab="años", col="brown" , col.main= "green3")
+
+plot(div4 , main="División de la serie 4 ", xlab="años", col="yellow" , col.main= "blue")
+
+############################1.3
+
+#Data frame de la serie 1 con la tendencia y la estacionalidad 
+
+tdesco1<-decompose(mults1)
+
+plot(tdesco1)
+
+names(tdesco1)
+
+
+tdesco1
+
+tend1<-tdesco1$trend
+tend1
+
+
+esta1<-tdesco1$seasonal
+esta1
+
+data1<-data.frame(mults1,tend1, esta1)
+
+#Data frame de la serie 3 con la tendencia y la estacionalidad 
+tdesco3<-decompose(mults3)
+
+plot(tdesco3)
+
+names(tdesco3)
+
+
+tdesco3
+
+tend3<-tdesco3$trend
+tend3
+
+
+esta3<-tdesco3$seasonal
+esta3
+
+data3<-data.frame(mults3,tend3, esta3)
