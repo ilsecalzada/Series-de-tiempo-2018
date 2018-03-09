@@ -1,0 +1,46 @@
+###################3 Ejercicio con una serie de tiempo##################
+
+###Aplique en los 4 métodos de pronósticos y grafiquenlos segun las gráficas elijan que metodo
+#es el mejor  para pronosticar y tambien grafiquen los datos ajustados y planteen segun su 
+#gráfica , ¡Cuál es el método que mejor ajusta a los datos reales?
+### Diario , un año, precio de cierre,invex,aplicar los cuatro modelos,grafica de pronosticos 
+#y una gráfca de ajustados 
+
+invex<-read.csv("file://C:/Users/Lap/Desktop/invex.csv")
+invex<-data.frame(invex[,2])
+invexts<-ts(invex,frequency =365, start =c(2017,66) )
+install.packages("fpp")
+require(fpp)  
+invexts
+met1<- meanf(invexts, h=10)
+met2<- naive(invexts, h=10)
+met3<- snaive(invexts, h=10)
+met4<- rwf(invexts, h=10, drift = T)
+
+
+x11()
+layout(1:2)
+
+plot(met1, main="Precios de cierre de Invex Controladora, S.A.B. De C.V. (INVEXA)
+",  col.main=" red" ,col= "green")
+lines(met1$mean, col= "green")
+lines(met2$mean, col= "black")
+lines(met3$mean, col= "purple")
+lines(met4$mean, col= "orange")
+legend("topleft" , lty=1 , col=c("green","black","purple", "orange"),  
+       legend=c("media", "ingenuo", "ingenuo estacional", " deriva"))
+# la prediccion mas aceptada es el ingenuo estacional con el modelo 3
+
+
+#Datos ajustados
+
+plot(met1, main="Precios de cierre Invex, datos ajustados",
+     col.main="red" ,col= "green")# Grafique mi primer modelo
+lines(met1$fitted, col= "green")
+lines(met2$fitted, col= "black")
+lines(met3$fitted, col= "purple")
+lines(met4$fitted, col= "orange")
+legend("topleft" , lty=1 , col=c("green","black","purple", "orange"),  legend=c("media", "ingenuo", "ingenuo estacional", " deriva"))
+
+
+##El modelo que más se aproxima al modelo real es el modelo ingenuo
