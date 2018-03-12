@@ -1,0 +1,32 @@
+#####Gráfica multiple de precios de acciones , 9 de Marzo 
+
+netflix<-read.csv("file://C:/Users/Lap/Desktop/NFLX.MX.csv")
+bimbo<-read.csv("file://C:/Users/Lap/Desktop/BIMBOA.MX (1).csv")
+televisa<-read.csv("file:///C:/Users/Lap/Desktop/TV (1).csv")
+banorte<-read.csv("file://C:/Users/Lap/Desktop/GFNORTEO.MX.csv")
+invex<-read.csv("file://C:/Users/Lap/Desktop/INVEXA.MX (1).csv")
+cemex<-read.csv("file://C:/Users/Lap/Desktop/CEMEXCPO.MX.csv")
+
+net<-data.frame(invex[,5])
+bim<-data.frame(bimbo[,5])
+tel<-data.frame(televisa[,5])
+ban<-data.frame(banorte[,5])
+inv<-data.frame(invex[,5])
+cem<-data.frame(cemex[,5])
+
+netts<- ts (net, start = c (2017,66), frequency= 252)
+bimts<- ts (bim, start = c (2017,66), frequency= 252)
+telts<- ts (tel, start = c (2017,66), frequency= 252)
+bants<- ts (ban, start = c (2017,66), frequency= 252)
+invts<- ts (inv, start = c (2017,66), frequency= 252)
+cemts<- ts (cem, start = c (2017,66), frequency= 252)
+
+x11 ()
+par (mfrow = c (2,3))
+plot (netts, main = "Precios de Cerre Netflix", col = "springgreen4")
+plot (bimts, main = "Precios de Cerre Bimbo", col = "blue")
+plot (telts, main = "Precios de Cerre Televisa", col = "purple")
+plot (bants, main = "Precios de Cerre Banorte", col = "yellow")
+plot (invts, main = "Precios de Cerre Invex ", col = "green")
+plot (cemts, main = "Precios de Cerre Cemex", col = "pink")
+
