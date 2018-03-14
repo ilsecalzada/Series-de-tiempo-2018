@@ -1,0 +1,86 @@
+####14 de Marzo 
+#FORMA GENARO 
+accid <- read.csv("file:///C:/Users/Lap/Desktop/Accidentes.csv")
+acci <- rbind.data.frame(accid[2:21,])
+
+a <- as.matrix(rbind(acci)[5:16,2])
+b <- as.matrix(rbind(acci)[5:16,3])
+c <- as.matrix(rbind(acci)[5:16,4])
+d <- as.matrix(rbind(acci)[5:16,5])
+e <- as.matrix(rbind(acci)[5:16,6])
+f <- as.matrix(rbind(acci)[5:16,7])
+g <- as.matrix(rbind(acci)[5:16,8])
+h <- as.matrix(rbind(acci)[5:16,9])
+i <- as.matrix(rbind(acci)[5:16,10])
+j <- as.matrix(rbind(acci)[5:16,11])
+k <- as.matrix(rbind(acci)[5:16,12])
+l <- as.matrix(rbind(acci)[5:16,13])
+m <- as.matrix(rbind(acci)[5:16,14])
+n <- as.matrix(rbind(acci)[5:16,15])
+ñ <- as.matrix(rbind(acci)[5:16,16])
+o <- as.matrix(rbind(acci)[5:16,16])
+p <- as.matrix(rbind(acci)[5:16,18])
+q <- as.matrix(rbind(acci)[5:16,19])
+r <- as.matrix(rbind(acci)[5:16,20])
+s <- as.matrix(rbind(acci)[5:16,21])
+serie <- rbind(a,b,c,d,e,f,g,h,i,j,k,l,m,n,ñ,o,p,q,r,s)
+#serie <- serie[-c(13,26,39,52,65,78,91,104,116,130,143,156,169,182,195,208,221,234,247,260), ]
+View(serie)
+
+accts<-ts(serie,frequency = 12, start = 1997)
+
+
+#FORMA DIOSEL
+accid <- read.csv("file:///C:/Users/Lap/Desktop/Accidentes.csv")
+accid
+#system.time(accid<-accid[6:17,-1])
+#accid<-accid[-1,]
+trs<-t(t(accid))
+ctrs<-c(trs)
+accts<-ts(ctrs,frequency = 12, start = 1997)
+accts
+
+install.packages("fpp")
+require(fpp)
+########SUAVIZADO EXPONENCIAL SIMPLE
+#SES para pronosticar 
+x11()
+plot(accts,yla="Accidentes de automóvil", xlab="Años", col="red")
+mod1<- ses(accts, alpha =.1 , h=12)
+mod2<- ses(accts, alpha =.5 , h=12)
+mod3<- ses(accts, alpha =.9 , h=12)
+#Primer argumento la serie, 2°:alpha ,  3°: Numero de pronosticos
+names(mod3)
+x11()
+layout(1:3)
+#Modelo 1
+plot(mod1, ylab="Accidentes", xlab="Año", main="Número de accidentes",
+     type="o", col="purple")
+#mean : pronsotico 
+lines(mod1$mean, col= "blue")
+lines(mod2$mean, col= "green")
+lines(mod3$mean, col= "yellow")
+
+legend("topleft", lty=5, col=c("purple","blue", "green"," yellow"),
+       c("datos originales", expression(alpha==.1), expression(alpha==.5),
+         expression(alpha==.9)), pch=1)
+#Modelo 2
+plot(mod2, ylab="Accidentes", xlab="Año", main="Número de accidentes",
+     type="o", col="brown")
+lines(mod1$mean, col= "blue")
+lines(mod2$mean, col= "green")
+lines(mod3$mean, col= "yellow")
+
+legend("topleft", lty=5, col=c("brown","blue", "green"," yellow"),
+       c("datos originales", expression(alpha==.1), expression(alpha==.5),
+         expression(alpha==.9)), pch=1)
+#Modelo 3
+plot(mod3, ylab="Accidentes", xlab="Año", main="Número de accidentes",
+     type="o", col="red")
+lines(mod1$mean, col= "blue")
+lines(mod2$mean, col= "green")
+lines(mod3$mean, col= "yellow")
+
+legend("topleft", lty=5, col=c("red","blue", "green"," yellow"),
+       c("datos originales", expression(alpha==.1), expression(alpha==.5),
+         expression(alpha==.9)), pch=1)
