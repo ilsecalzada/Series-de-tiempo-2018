@@ -1,0 +1,41 @@
+################ 12 Marzo 
+acci<-read.csv ("C:/Users/Lap/Deskto/accidentes.csv")
+View(acci)
+x <-rbind(acci)[2:21,]
+View(x)
+
+c97<- as.matrix(rbind(x)[,2])
+c98<- as.matrix(rbind(x)[,3])
+c99<- as.matrix(rbind(x)[,4])
+c00<- as.matrix(rbind(x)[,5])
+c01<- as.matrix(rbind(x)[,6])
+c02<- as.matrix(rbind(x)[,7])
+c03<- as.matrix(rbind(x)[,8])
+c04<- as.matrix(rbind(x)[,9])
+c05<- as.matrix(rbind(x)[,10])
+c06<- as.matrix(rbind(x)[,11])
+c07<- as.matrix(rbind(x)[,12])
+c08<- as.matrix(rbind(x)[,13])
+c09<- as.matrix(rbind(x)[,14])
+c10<- as.matrix(rbind(x)[,15])
+c11<- as.matrix(rbind(x)[,16])
+c12<- as.matrix(rbind(x)[,17])
+c13<- as.matrix(rbind(x)[,18])
+c14<- as.matrix(rbind(x)[,19])
+c15<- as.matrix(rbind(x)[,20])
+c16<- as.matrix(rbind(x)[,21])
+
+serie <- rbind(c97,c98, c99, c00,c01, c02, c03, c04,c05,c06, c07,c08,c09,c10,c11,c12,
+               c13, c14, c15, c16)
+View(serie)
+
+
+
+
+accidentes <-read.csv ("C:/Users/Lap/Deskto/accidentes.csv")
+accidente <-accidentes [-1,1]
+accidente <-accidentes [, - 1]
+accidente <-accidentes [, - 3]
+trs <-t (t (accidente))
+ctrs <-c (trs)
+accts <-ts (ctrs, frequency = 13, start (1997))
