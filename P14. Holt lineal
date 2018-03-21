@@ -1,0 +1,40 @@
+require(foreign)
+coe1t417<-read.dbf("C:/Users/USUARIO/Desktop/coe1t417.dbf")
+
+coe1t417$P1<-as.numeric(as.character(coe1t417$P1))
+coe1t417$P1A1<-as.numeric(as.character(coe1t417$P1A1))
+coe1t417$P1A2<-as.numeric(as.character(coe1t417$P1A2))
+coe1t417$P1B<-as.numeric(as.character(coe1t417$P1B))
+coe1t417$P1C<-as.numeric(as.character(coe1t417$P1C))
+coe1t417$P1D<-as.numeric(as.character(coe1t417$P1D))
+coe1t417$P1E<-as.numeric(as.character(coe1t417$P1E))
+ocupo<-subset(coe1t417,coe1t417$P1==1|coe1t417$P1A1==1|coe1t417$P1A2==2
+              |coe1t417$P1C==1|coe1t417$P1C==2|coe1t417$P1C==31|coe1t417$P1C4|coe1t417$P1D==1|coe1t417$P1E==1)
+sum(table(coe1t417$P3))
+sum(table(coe1t417$P1==1))
+
+table(coe1t417$P1==1)
+
+
+#################### Método Holt Lineal ########################
+
+pib<-read.csv("C:/Users/USUARIO/Desktop/pib.csv")
+###Header=F para tomar el primer valor como dato, si es T quiere decir que es un encabezado 
+pib
+pibts<-ts(pib, start = 1960, frequency = 1)
+
+require (fpp)
+help(ses)
+
+mod1 <- ses(pibts, alpha= .1, initial="simple" , h=5)
+mod2<- holt(pibts, alpha = .8, beta =.5, initial= "simple", h=5)
+
+x11()
+plot(mod1)
+mod1$fitted
+lines(mod1$fitted, col= "green")
+lines(mod2$fitted, col= "blue")
+##El fitted deberia de ser nuestra Y-gorrito , el Y-ajustado de los valores , usa la ecuación de nivel 
+#Nos decidiriamos por el modelo holt (azul) es el que más se asemeja 
+lines(mod1$mean , col= "green")
+lines(mod2$mean , col= "blue")
