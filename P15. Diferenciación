@@ -1,0 +1,19 @@
+################Diferenciación, miercoles 4 de Abril
+
+x11()
+layout (1:3)
+plot(AirPassengers)
+
+
+#Serie de tiempo con tendencia(a incrementarse) y con estacionalidad (en el mismo periodo hay incrementos importantes)
+#Una ST estacionaria: media y varianza constante
+
+######Convertir a estacionaria una ST o estabilizar la varianza con el logaritmo 
+
+plot(log(AirPassengers))
+#Yatiene una varianza más constante
+
+######Diferenciación 
+##Una doble transformacion, una diferenciacion  (diff), primero aplica el logaritmo 
+plot(diff(log(AirPassengers)))
+#Visualemente ya es estacionaria 
