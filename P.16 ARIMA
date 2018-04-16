@@ -1,0 +1,12 @@
+################Practica 16 de Abril de 2018
+desocup<-read.csv("file://C:/Users/USUARIO/Documents/desocupación.csv")
+desot<- ts(desocup, start=2005, frequency = 4 )
+require(fpp)
+mod1<-auto.arima(desot, seasonal = F )
+#La definimos como no estacional, debe de ser False 
+##R de propone varias constantes
+mod1
+##ARIMA(2,1,2)
+X11()
+plot(forecast(mod1, h=10))
+##Nos dio teta 1 y 2, así como phi 1 y 2 
