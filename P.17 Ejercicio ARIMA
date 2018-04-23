@@ -1,0 +1,34 @@
+basepib<-read.csv("file:///C:/Users/USUARIO/Documents/pib.csv")
+pibst<-ts(basepib, start = 1961, frequency =1)
+require(fpp)
+mod1<- auto.arima(pibst,seasonal= F )
+mod1
+#ARIMA(0,1,2) , 1 elemento de diferenciacion y´, obteniendo un modelo de medias móviles porque solo tenemos q de orden 2 (dos tetas) , 
+# como p=0 , no tenemos la parte auto regresiva 
+#No hay constante , teta1=-0.6521 ,teta2= -0.2041
+#y´t=-0.6521 et-1 + (-0.2041)et-1+et 
+
+#Pronosticar 
+x11()
+plot(forecast(mod1, h=10))
+
+
+#Con la función auto.arima encontrar el modelo arima de las siguientes series de tiempo y plantearlo en ecuación
+#1)Apple
+#2)tasa de asalariados 
+
+#a)
+accapple<-read.csv("file:///C:/Users/USUARIO/Documents/AAPL (1).csv")
+applets<-ts(accapple, start =2017, frequency =252)
+
+mode1<-auto.arima(applets, seasonal=F)
+mode1
+#ARIMA(0,1,0) , sin ecuación, los datos no nos sirven para un model ARIMA
+
+#b)
+baseas<-read.csv("file:///C:/Users/USUARIO/Documents/asalariados .csv")
+asalts<-ts(baseas, start =2005, frequency = 4 )
+mod2<-auto.arima(asalts, seasonal=F)
+mod2
+#ARIMA(2,1,0)
+#1 elemento de diferenciación , un modelo auto regresivo de grado 2 y q=0 
