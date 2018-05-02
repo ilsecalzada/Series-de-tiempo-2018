@@ -1,0 +1,123 @@
+#################################Practica 2 de Mayo 
+bimbo<-read.csv("file:///C:/Users/USUARIO/Documents/BIMBOA.MX.csv")[,5]#Elegir columna 5 de las base 
+bimbots<-ts(bimbo, frequency = 252, start = 2017)
+
+##Vamos a revisar si la serie es estacionaria
+##Eso lo hacemos con el adf.test
+require(fpp)
+adf.test(bimbots)
+
+#En esta prueba esperamos un p-value menor a .05 para afirmar que la serie es estacionaria, sin embargo 
+#en la serie tenemos un p-value = 0.0826 por lo que hay que aplicar una diferenciación para convertir 
+#la serie en estacionaria...
+dbimbo<-diff(bimbots)
+#Aplicamos la diferenciación (diff) a la st para convertirla en estacionaria 
+adf.test(dbimbo)
+#Ya sale un p-value = 0.01, es decir que ya es estacionaria y ya podemos aplicar un modelo ARIMA por lo
+#que hay que elegir los valores de p, d y q, para elegir los valores de p y q se utiliza la función de 
+#autocorrelación (acf) y la función de autocorrelación parcial(pacf)
+
+#####1° Aplicamos la función de autocorrelación para elegir el valor de q 
+x11()
+acf(dbimbo)
+#Una vez que apliquemos el acf vamos a observar la gráfica y ver cuantas líneas sobrepasan el margen
+# y el número de líneas son el valor de q 
+# El primer valor de la autocorrelación sobre pasará la linea
+#Ninguna linea sobre pasa el rango
+x11()
+pacf(dbimbo)
+
+mod1bimb<-Arima(bimbots, order=c(0,1,0)) 
+mod1bimb
+#El modelaje será de la serie de timpo original con los valores obtenidos al estacionar la serie ,
+#en este caso lo valores que se obtuvieron fueron (0,1,0)
+#(Elegimos otros dos métodos al azar)
+
+mod2bimb<-Arima(bimbots, order=c(1,1,2)) 
+mod2bimb
+
+mod3bimb<-Arima(bimbots, order=c(3,1,2)) 
+mod3bimb
+
+mod4bimb<-Arima(bimbots, order=c(2,1,2)) 
+mod4bimb
+
+#El mejor modelo sera el que tenga el  AICc menor 
+#En este caso elegimos el mod4bimb , y con ese pronosticámos
+mod4<- forecast(mod4bimb, h=12)
+x11()
+plot(forecast(mod4bimb, h=12), include=45 ) 
+#include: nos da los últimos n datos
+
+mod5bimb<-auto.arima(bimbots)
+mod5bimb
+#El auto arima nos proporciona un modelo arima de ARIMA(1,1,1) 
+x11()
+plot(forecast(mod5bimb, h=12) , include = 45)
+
+####Elegir dos series de tiempo diferentes a las que hemos visto en clase y repetir el procedimiento
+#para elegir el modelo Arima #Mejor" segun los criterios AICc y compararlos con el modelo auto.arima
+
+####SERIE: Exportaciones de metales y minerales 
+
+expor<-read.csv("file:///C:/Users/USUARIO/Documents/Mexico exportaciones.csv")
+exports<-ts(expor, start=1962, frequency = 12 )
+require(fpp)
+adf.test(exports)
+#en la serie tenemos un p-value = 0.8291 por lo que hay que aplicar una diferenciación para convertir 
+#la serie en estacionaria...
+dexport<-diff(exports)
+adf.test(dexport)
+#El p-value = 0.01 por lo que ya es estacionaria 
+x11()
+acf(dexport)
+#El p seria de 1 
+x11()
+pacf(dexport)
+
+mod1expor<-Arima(exports, order=c(1,1,1)) 
+mod1expor
+# AICc=245.05
+mod2expor<-Arima(exports, order=c(2,1,2)) 
+mod2expor
+# AICc=236.57
+mod3expor<-Arima(exports, order=c(3,1,3)) 
+mod3expor
+# AICc=243.23 
+
+#Con la función auto arima
+mod4export<-auto.arima(exports)
+mod4export
+#el modelo con la función autoarima es ARIMA(2,1,2) con un AICc=236.57 
+x11()
+plot(forecast(mod4export, h=12) , include = 45)
+
+###SERIE DE TIEMPO : Desempleo, mujeres 
+pobrul<-read.csv("file:///C:/Users/USUARIO/Documents/pob rural.csv")
+pobrults<-ts(pobrul, start=1960, frequency = 12 )
+
+adf.test(pobrults)
+#en la serie tenemos un p-value = 0.2418 por lo que hay que aplicar una diferenciación para convertir 
+#la serie en estacionaria...
+dpobrul<-diff(pobrults)
+adf.test(dpobrul)
+
+ddpobrul<-diff(dpobrul)
+adf.test(ddpobrul)
+#Al aplicar doble diferenciación El p-value = 0.01 por lo que ya es estacionaria 
+
+x11()
+acf(dpobrul)
+###Tenemos un valor de p=14 
+
+x11()
+pacf(dpobrul) #Tenemos un valor q=0
+
+mod1pob<-Arima(pobrults, order=c(14,2,0)) 
+mod1pob
+#AICc=-204.18
+
+mod2pob<-auto.arima(pobrults)
+mod2pob
+#Con la función auto arima nos da un modelo ARIMA(1,2,0), 
+#AICc=-234.88  
