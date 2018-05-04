@@ -1,0 +1,93 @@
+##### 4 de Mayo
+#Bajar serie de tiempo de ENOE:- Tasa asalariados, -Desocupación, -Subocupacion, - TIL 1 
+#Crear la serie de tiempo 2005 a 2015
+#Aplicar ARIMA a la ST
+#Pronosticar la serie de tiempo y contrastarlo con los datos originales 2015 a 2018
+require(fpp)
+asala<-read.csv("file:///C:/Users/USUARIO/Documents/asalariados.csv")
+asalts<-ts(asala, start = 2005 , end = 2015 , frequency = 4)
+
+
+
+subocu<-read.csv("file:///C:/Users/USUARIO/Documents/subocupación.csv")
+subocuts<-ts(subocu, start = 2005 , end = 2015 , frequency = 4)
+
+til<-read.csv("file:///C:/Users/USUARIO/Documents/TIL 1 .csv")
+tilts<-ts(til, start = 2005 , end = 2015 , frequency = 4)
+
+#####ALASARIADOS 
+adf.test(asalts)
+#El p-value = 0.02068 de la st de asalariados, ya es estacionaria 
+x11()
+acf(asalts)
+#El valor de p=8
+x11()
+pacf(asalts)
+#El valor de q=1
+
+mod1asal<-Arima(asalts, order=c(8,0,1)) 
+mod1asal #AICc=136.2  
+
+mod2asal<-auto.arima(asalts) #ARIMA(1,0,0)(1,1,0)[4]
+mod2asal #AICc=94.4
+
+mod3asal<-Arima(asalts, order=c(6,0,3)) 
+mod3asal # AICc=141.23
+
+mod4asal<-Arima(asalts, order=c(10,0,3)) 
+mod4asal  # AICc=143.42 
+
+mod5asal<-Arima(asalts, order=c(9,0,1)) 
+mod5asal # AICc=131.57
+
+
+asal2ts<-ts(asala, start = 2005 , end = 2017 , frequency = 4)
+x11()
+layout(1:2)
+plot(forecast(mod5asal, h=8), include=41 )
+plot(asal2ts)
+
+x11()
+layout(1:2)
+plot(forecast(mod2asal, h=8), include=41 )
+plot(asal2ts)
+
+#######Tasa Desocupación
+desoc<-read.csv("file:///C:/Users/USUARIO/Documents/desocupacion.csv")
+desocts<-ts(desoc, start = 2005 , end = 2015 , frequency = 4)
+
+adf.test(desocts)
+# EL p-value = 0.9847 por lo que hay que aplciar diferenciación
+ddesoc<-diff(desocts)
+adf.test(ddesoc)
+dddesoc<-diff(ddesoc)
+adf.test(dddesoc)
+#Se diferencio 2 veces y se obtuvo un p-value = 0.01287
+x11()
+acf(dddesoc) #p=15 
+x11()
+pacf(dddesoc) #q=1
+
+mod1deso<-Arima(desocts, order = c(15,2,1))
+mod1deso
+
+mod2deso<-auto.arima(desocts) 
+mod2deso 
+
+mod3deso<-Arima(desocts, order=c(14,0,1)) 
+mod3deso 
+
+mod4deso<-Arima(desocts, order=c(10,0,3)) 
+mod4deso  
+
+mod5deso<-Arima(desocts, order=c(9,0,1)) 
+mod5deso 
+
+
+
+
+
+
+adf.test(subocu)
+
+adf.test(tilts)
