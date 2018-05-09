@@ -1,0 +1,45 @@
+#####Práctica 20 9 de Mayo
+
+
+install.packages("fpp")
+require(fpp)
+help("euretail") 
+#Graficar para ver si la ST es estacional
+plot(euretail)
+#al observar la gráfica vemos que no es estacionaria por lo que se aplica una diferenciación
+x11()
+tsdisplay(diff(euretail,4)) #4: porque es trimestral
+#Aún no tiene un comportamiento estacionario
+tsdisplay(diff(diff(euretail,4)))
+#En esta st los picos ya son más marcados, ya se puede observar más que es estacional
+
+#Con esto se puede observar a drandes rasgos una St con rasgos similares a una serie 
+#estacionarioa po lo que ahora hay que encontrar un modelo arima más apropiado basados en el 
+#ACF y PACF.
+#El primer rezago o valor que se observa en el ACF  y que cobrepasa ligermente la frontera
+#podría sugerir un componente MA(1),
+#Por lo que podriamos iniciar con una ARIMA (0,1,1)(0,1,1)4
+
+mod<-Arima(euretail, order=c(0,1,1), seasonal = c(0,1,1))
+#Siguinete paso, observar los residuales...
+tsdisplay(residuals(mod))
+###Una vez que se tiene una primera propuesta de modelo Arima se tiene que observar los 
+#residuales de este modelo y observar los valores de ACF y PACR de los residuales muestran 
+#valores signific en el rezago 2 y casi significativos en e rezago 3, lo que indica que 
+#pueden ser agregados algunos componentes no estacionales en el modelo...
+#Por ejemplo ARIMA(0,1,2)(0,1,1)4 y (0,1,3)(0,1,1)4 con estos modelos propuestos se aplica R
+#y observar eñ AICC ,mejor para elegir que modelo predecir
+#Una vez que se elige el modelo con base en el AICC como ultimo paso hay que obtener los 
+#residuales u garantizar que sean ruidaod blanco con la prueba..
+#Box.test(res, lag=16, fitdf=4, type="ljung")
+
+mod2<-Arima (euretail, order = c(0,1,2), seasonal = c(0,1,1))
+mod3<-Arima (euretail, order = c(0,1,3), seasonal = c(0,1,1))
+mod4<-Arima (euretail, order = c(0,1,4), seasonal = c(0,1,1))
+mod# AICc=75.79  
+mod2#AICc=74.36 
+mod3#AICc=68.53
+mod4#AICc=70.87
+Box.test(residuals(mod3),lag=16, fitdf = 4, type = "Ljung-Box")
+#para decir que los residuales son independientes mayor a 0.5 , p-value = 0.8569
+#Ahora si se puede pronósticar 
