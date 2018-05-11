@@ -1,0 +1,80 @@
+##########Práctica 21, EJERCICIOS ARIMA, SARIMA Y HOLT 
+require(fpp)
+
+
+#!) Bajar serie histórica del salario mínimo y la inflación y realizar pronóstico con
+#un modelo holt lineal y arima no estacional.
+#2) De dos series estacionales( las queq quieran) aplicar los dos modelos arima
+#estacional y pronósticar estas series
+######################   1)
+############Inflación
+inlfación<-read.csv("file:///C:/Users/Lap/Desktop/IPC.csv")
+infts<-ts(inlfación, frequency = 12, start = 1970)
+adf.test (infts)
+# p-value = 0.02122, ya es estacionaria
+x11 ()
+acf (infts) 
+x11 ()
+pacf (infts)
+#por los datos obtenidos para p, se aplica un auto arima
+modinf1<-auto.arima (infts) 
+modinf1
+#ARIMA(1,1,0)(0,0,2)[12] 
+x11()
+plot(forecast(modinf1, h=12), include=36 ) 
+
+modinf2<- holt(infts, alpha = .8, beta =.2, initial= "simple", h=12)
+modinf2
+x11()
+plot(forecast(modinf2, h=12), include = 36 ) 
+
+###########Salario mínimo
+salario<-read.csv("file:///C:/Users/Lap/Desktop/salario .csv")
+salts<-ts(salario, frequency = 12, start= 1964)
+
+adf.test (salts)
+# p-value = 0.99, no es estacionaria
+dsalts<-diff (salts)
+adf.test (dsalts)
+
+# p-value = 0.01, ya es estacionaria
+x11 ()
+acf (dsalts) # q = 4
+x11 ()
+pacf (dsalts) # p = 6
+
+modsal1<-Arima (salts, order=c(6,1,4) )
+
+modsal2<-auto.arima (salts)
+modsal2
+#ARIMA(1,2,2)(0,0,2)[12], AICc=1042.09 
+x11()
+plot(forecast(modsal2,h=12), include=36)
+
+modsal3<- holt(salts, alpha = .8, beta =.5, initial= "simple", h=12)
+x11()
+plot(forecast(modsal3,h=12), include=36)
+
+##################   2)
+##Tasa de ocupación en el sector informal (TOSI 1)
+tosi<-read.csv("file:///C:/Users/Lap/Desktop/tasa ocupacion TOSI.csv")
+tosits<-ts(tosi, start= 2005, frequency = 4)
+adf.test (tosits)
+#p-value = 0.6896, no es estacionaria
+dtosits<-diff(tosits)
+adf.test (dtosits)
+#p-value = 0.01587 , ya es estacionaria
+x11 ()
+acf (dtosits) #q=1
+x11 ()
+pacf (dtosits) #p=2
+modtosi1<-Arima(tosits, order=c(2,1,1), seasonal = c(1,1,2))
+modtosi1 #AICc=76.15 
+modtosi2<-Arima(tosits, order=c(2,1,1), seasonal = c(3,1,2))
+modtosi2  # AICc=79.15 
+modtosi3<-Arima(tosits, order=c(2,1,3), seasonal = c(2,1,2))
+modtosi3 #AICc=72.81 
+Box.test(residuals(modtosi3),lag=16, fitdf = 12, type = "Ljung-Box")
+#Residuales p-value = 0.08152 
+x11()
+plot(forecast(modtosi3,h=12), include=36)
