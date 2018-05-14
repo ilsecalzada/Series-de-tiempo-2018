@@ -1,0 +1,183 @@
+##########################Ejercicio 
+#Bajar la acción de aroméxico y proponer un arima de (1,0,0) es decir un modelo autoregresivo y plantearlo con base en la
+#ecuación de modelos arima despues proponer un arima  (2,0,0 y plantearlo en la ecuación, ahora para un modelo arima
+#(0,0,1) es decir un modelo MA(1) y plantearlo en la ecuación ahora un un arima (0,0,2) es decir MA(2)
+require(fpp)
+aero<-read.csv("file:///C:/Users/USUARIO/Desktop/AEROMEX.MX.csv")
+aerots<-ts(aero, frequency = 252, start = 2017)
+
+adf.test(aerots)
+# tiene un p-value = 0.4095, no es estacionaria
+daerots<-diff(aerots)
+adf.test(daerots) #Ya es estacionaria con un  p-value = 0.01
+mod1<-Arima( aerots, order=c(1,0,0))
+mod1
+#yt= 0.9982*yt-1
+#AICc=211.15
+
+mod2<-Arima( aerots, order=c(2,0,0))
+mod2
+#yt= 0.9971*Yt-1 + 0.0012*Yt-2
+#AICc=213.21 
+
+mod3<-Arima( aerots, order=c(0,0,1))
+mod3
+#Yt=0.9684et-1 
+#AICc=1103.58
+
+mod4<-Arima( aerots, order=c(0,0,2))
+mod4
+#Yt=1.5396et-1+ 0.8100et-2
+#AICc=879.67
+
+
+##Para las siguientes series encuentran la transformación o la diferenciación para convertirla en estacionaria a trave
+#de las gráficas y el adf.test y además propongan modelos arima que ajusten a la series y confirmen que los residuales
+#sean ruido blanco 
+
+
+########usnetelec
+usts<-(usnetelec)
+adf.test(usts)
+# no es estacionaria  p-value = 0.3535
+dusts<-diff(usts)
+adf.test(dusts)
+#p-value = 0.308, aún no es estacionaria
+ddusts<-diff(dusts)
+adf.test(ddusts)
+#p-value = 0.01 , ya es estacionaria 
+plot(usts)
+x11()
+acf(ddusts) #q=2
+x11()
+pacf(ddusts) #p=1
+
+mod1u<-arima(usts, order = c(2,2,1))
+mod1u
+#aic = 577.43
+mod2u<-arima(usts, order = c(3,2,3))
+mod2u
+# aic = 573.06
+
+mod3u<-arima(usts, order = c(2,2,2))
+mod3u
+#aic = 577.56
+
+Box.test(residuals(mod2u),lag=16, fitdf = 1, type = "Ljung-Box")
+#p-value = 0.6378 por lo tanto los residuales si son independientes , son ruido blanco
+plot(forecast(mod2u, h= 25))
+
+#Con Autorarima
+mod4u<-auto.arima(usts)
+mod4u
+#ARIMA(0,1,0), AICc=580.74
+Box.test(residuals(mod4u),lag=16, fitdf = 1, type = "Ljung-Box")
+#p-value = 0.2358por lo tanto los residuales si son independientes , son ruido blanco
+plot(forecast(mod4u, h= 25))
+
+########usgdp
+gdp<-(usgdp)
+adf.test(gdp)
+# no es estacionaria  p-value = 0.99
+dgdp<-diff(gdp)
+adf.test(dgdp)
+#p-value = 0.01, ya es estacionaria 
+
+plot(dgdp)
+x11()
+acf(dgdp) #q=12
+x11()
+pacf(dgdp) #p=4
+
+mod1g<-arima(gdp, order = c(4,1,12))
+mod1g
+#  aic = 2417.58
+mod2g<-arima(gdp, order = c(4,1,8))
+mod2g
+
+Box.test(residuals(mod1g),lag=16, fitdf = 1, type = "Ljung-Box")
+#p-value = 0.9104 con el modelo 1 , son ruido blanco 
+plot(forecast(mod1g, h= 25))
+
+# Con el auto arima 
+mod3g<-auto.arima(gdp)
+mod3g
+#ARIMA(2,2,2) , AICc=2409.39 
+Box.test(residuals(mod3g),lag=16, fitdf = 1, type = "Ljung-Box")
+#p-value = 0.04728 con el autoarima por lo tanto los residuales si son independientes, son ruido blanco
+plot(forecast(mod3g, h= 25))
+
+
+
+
+########enplanements
+enp<-(enplanements)
+adf.test(enp)
+#p-value = 0.01 ya es estacionaria 
+
+plot(enp)
+x11()
+acf(enp) #24 
+x11()
+pacf(enp) #14
+
+mod1en<-arima(enp, order = c(24,0,14))
+mod1en
+# aic = 1130.45
+mod2en<-arima(enp, order = c(18,0,16))
+mod2en
+# aic = 1083.95
+mod3en<-arima(enp, order = c(16,0,16))
+mod3en
+# aic = 1082.49
+
+
+Box.test(residuals(mod3en),lag=16, fitdf = 1, type = "Ljung-Box")
+#p-value = 1 por lo tanto los residuales si son independientes , son ruido blanco
+plot(forecast(mod3en, h= 25))
+
+#Con Autorarima
+mod4en<-auto.arima(enp)
+mod4en
+#ARIMA(2,0,1)(0,1,1)[12] , AICc=993.55  
+Box.test(residuals(mod4en),lag=16, fitdf = 1, type = "Ljung-Box")
+# p-value = 0.8878 por lo tanto los residuales si son independientes , son ruido blanco
+plot(forecast(mod4en, h= 25))
+
+
+
+
+########visitors
+visit<-(visitors)
+adf.test(visit)
+#p-value = 0.01 ya es estacionaria 
+
+plot(visit)
+x11()
+acf(visit)  #q=23
+x11()
+pacf(visit) #p=8
+
+mod1vi<-arima(visit, order = c(23,0,8))
+mod1vi
+#aic = 2146.63
+mod2vi<-arima(visit, order = c(20,0,10))
+mod2vi
+# aic = 2133.96
+mod3vi<-arima(visit, order = c(18,0,8))
+mod3vi
+#  aic = 2142.89
+
+
+Box.test(residuals(mod3vi),lag=16, fitdf = 1, type = "Ljung-Box")
+#p-value = 0.3943 por lo tanto los residuales si son independientes , son ruido blanco
+plot(forecast(mod3vi, h= 25))
+
+#Con Autorarima
+mod4vi<-auto.arima(visit)
+mod4vi
+#ARIMA(1,0,1)(0,1,2)[12] , AICc=1946.04 
+Box.test(residuals(mod4vi),lag=16, fitdf = 1, type = "Ljung-Box")
+# p-value = 0.6037 por lo tanto los residuales si son independientes , son ruido blanco
+plot(forecast(mod4vi, h= 25))
+
